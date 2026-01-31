@@ -1,7 +1,7 @@
 from datetime import datetime
 
-def get_time():
+def printt(message):
     now = datetime.now()
     formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
-    return formatted_time
+    print(formatted_time, message) 
 
