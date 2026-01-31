@@ -32,7 +32,7 @@ while True:
     while True:
         bytes_received = new_connection.recv(4096)
         if not bytes_received:
-            conn.close()
+            new_connection.close()
             break
 
         buffer += bytes_received
