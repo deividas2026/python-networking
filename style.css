@@ -8,3 +8,15 @@ body {
 h1 {
     font-size: 48px;
 }
+
+a, a:link{
+    text-align: left;
+    display: block;
+    color: #0f0;
+}
+
+a:hover, a:active{
+    color: white;
+}
+
+

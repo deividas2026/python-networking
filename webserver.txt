@@ -14,6 +14,9 @@ mime_types = {
     ".txt": "text/plain",
     ".html": "text/html",
     ".css": "text/css",
+    ".pdf": "application/pdf",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
 }
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   
@@ -32,7 +35,7 @@ while True:
     while True:
         bytes_received = new_connection.recv(4096)
         if not bytes_received:
-            conn.close()
+            new_connection.close()
             break
 
         buffer += bytes_received
@@ -50,6 +53,44 @@ while True:
         new_connection.close()
 
     else:
+        if file_path == SERVER_ROOT:
+            files = os.listdir(file_path)
+            links = []
+            for file in files:
+                f_name, f_extension = os.path.splitext(file)
+                if f_extension in mime_types:
+                    links.append(f'<a href="{file}">{file}</a>')
+                    
+            response_body = []
+            response_body.extend([
+                "<!DOCTYPE html>",
+                "<html>",
+                "<head>",
+                "<link rel=\"stylesheet\" href=\"style.css\">",
+                "</head>",
+                "<body>",
+                "<h1>Available files</h1>",
+            ])
+            response_body.extend(links)
+            response_body.extend([
+                "</body>",
+                "</html>",
+            ])
+
+            response_body = "".join(response_body).encode("ISO-8859-1")
+
+            response_header = (
+                "HTTP/1.1 200 OK\r\n"
+                "Content-Type: text/html\r\n"
+                f"Content-Length: {len(response_body)}\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+            ).encode("ISO-8859-1") 
+
+            new_connection.sendall(response_header + response_body)
+            new_connection.close()
+            continue
+                 
         try:
             with open(file_path, "rb") as f:
                 fb = f.read()
@@ -67,6 +108,3 @@ while True:
         except:
             new_connection.sendall(send_404())
             new_connection.close()
-
-
-main()
