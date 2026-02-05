@@ -25,9 +25,12 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(("", port))
 server.listen()
+server_ip, server_port = server.getsockname()
+print(f"Server is listening on: {server_ip}:{server_port}")
 
 while True:
     new_conn, new_addr = server.accept()
+    print(f"New connection: {new_addr[0]}:{new_addr[1]}")
     request = b"" 
 
     while True:
@@ -38,3 +41,12 @@ while True:
         
     new_conn.sendall(response)
     new_conn.close()
+ 
+
+
+
+
+
+
+
+
