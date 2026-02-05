@@ -14,10 +14,7 @@ elif len(sys.argv) != 2:
     sys.exit("Usage: webclient.py hostname [port]")
     
 host = sys.argv[1]
-if port in [80, 443]:
-    host_header = host
-else:
-    host_header = f"{host}:{port}"
+host_header = host if port in [80, 443] else f"{host}:{port}"
 
 request = (
     "GET / HTTP/1.1\r\n"
