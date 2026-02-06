@@ -18,9 +18,9 @@ host_header = host if port in [80, 443] else f"{host}:{port}"
 
 payload = b"Hello from client"
 request = (
-    "GET / HTTP/1.1\r\n"
+    "POST / HTTP/1.1\r\n"
     f"Host: {host_header}\r\n"
-    " Content-Type: text/plain      \r\n"
+    f"Content-Type: text/plain\r\n"
     f"Content-Length: {len(payload)}\r\n"
     "User-Agent: webclient/0.1\r\n"
     "Accept: */*\r\n"
