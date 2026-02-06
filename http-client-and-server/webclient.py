@@ -16,14 +16,18 @@ elif len(sys.argv) != 2:
 host = sys.argv[1]
 host_header = host if port in [80, 443] else f"{host}:{port}"
 
+payload = b"Hello from client"
 request = (
     "GET / HTTP/1.1\r\n"
     f"Host: {host_header}\r\n"
+    " Content-Type: text/plain      \r\n"
+    f"Content-Length: {len(payload)}\r\n"
     "User-Agent: webclient/0.1\r\n"
     "Accept: */*\r\n"
     "Connection: close\r\n"
     "\r\n"
 ).encode("ISO-8859-1")
+request += payload
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((host, port))
