@@ -1,0 +1,25 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+a {
+    font-size: 24px;
+    display: block;
+    margin: 10px;
+}
+
+/* unvisited */
+a:link {
+   color: white; 
+}
+
+/* visited */
+a:visited {
+   color: white; 
+}
+
+/* hover */
+a:hover {
+   color: green; 
+}
