@@ -9,6 +9,10 @@ supported_mime_types = {
     ".txt": "text/plain",
     ".html": "text/html",
     ".css": "text/css",
+    ".pdf": "application/pdf",
+    ".png": "image/png",
+    ".jpeg": "image/jpeg",
+    ".jpg": "image/jpeg",
 }
 
 if len(sys.argv) == 2:
