@@ -49,7 +49,11 @@ while True:
     method, path, protocol = first_header_field 
     #print(json.dumps(header_fields, indent=4))
     
-    if path == "/":
+    relative_path = path.lstrip("/")
+    joined_path = os.path.join(FILES_DIR, relative_path)
+    final_path = os.path.abspath(joined_path)
+
+    if final_path == FILES_DIR:
         mime_type = "text/html"
         files = os.listdir(FILES_DIR)
         html_links = []
@@ -77,17 +81,34 @@ while True:
         response = response_header + response_body
         new_conn.sendall(response) 
         new_conn.close()
-        continue
+    elif final_path.startswith(FILES_DIR + os.sep):
+        file_extension = os.path.splitext(final_path)[-1]
+        mime_type = supported_mime_types.get(file_extension)
 
-    file_path = os.path.split(path)[-1]
-    file_path = os.path.join(FILES_DIR, file_path)
-    file_extension = os.path.splitext(file_path)[-1]
-    mime_type = supported_mime_types.get(file_extension)
-
-    try:
-        with open(file_path, "rb") as fp:
-            data = fp.read()
-    except:
+        try:
+            with open(final_path, "rb") as fp:
+                data = fp.read()
+                response = (
+                    "HTTP/1.1 200 OK\r\n"
+                    f"Content-Type: {mime_type}\r\n"
+                    f"Content-Length: {len(data)}\r\n"
+                    "\r\n"
+                ).encode("ISO-8859-1")
+                response += data
+                new_conn.sendall(response)
+                new_conn.close()
+        except:
+            data = b"Not Found"
+            response = (
+                "HTTP/1.1 404 Not Found\r\n"
+                "Content-Type: text/plain\r\n"
+                f"Content-Length: {len(data)}\r\n"
+                "\r\n"
+            ).encode("ISO-8859-1")
+            response += data
+            new_conn.sendall(response)
+            new_conn.close()
+    else:
         data = b"Not Found"
         response = (
             "HTTP/1.1 404 Not Found\r\n"
@@ -98,17 +119,3 @@ while True:
         response += data
         new_conn.sendall(response)
         new_conn.close()
-        continue
-     
-    response = (
-        "HTTP/1.1 200 OK\r\n"
-        f"Content-Type: {mime_type}\r\n"
-        f"Content-Length: {len(data)}\r\n"
-        "\r\n"
-    ).encode("ISO-8859-1")
-    response += data
-    new_conn.sendall(response)
-    new_conn.close()
-
-
-
