@@ -50,7 +50,7 @@ def extract_word(word_packet):
     """
 
     # TODO -- Write me!
-    word_len = int.from_bytes(word_packet, "big")
+    word_len = int.from_bytes(word_packet[:WORD_LEN_SIZE], "big")
     word_bytes = word_packet[WORD_LEN_SIZE:]
     return word_bytes.decode("UTF-8")
 
@@ -76,7 +76,6 @@ def main(argv):
 
         word = extract_word(word_packet)
         print(f"    {word}")
-        print(f"    {len(word)}")
 
     s.close()
 
