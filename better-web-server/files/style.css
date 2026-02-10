@@ -9,17 +9,14 @@ a {
     margin: 10px;
 }
 
-/* unvisited */
 a:link {
    color: white; 
 }
 
-/* visited */
 a:visited {
    color: white; 
 }
 
-/* hover */
 a:hover {
    color: green; 
 }
